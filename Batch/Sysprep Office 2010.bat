@@ -14,7 +14,7 @@ cscript "C:\Program Files (x86)\Microsoft Office\Office14\OSPP.VBS" /act
 %INFO% Creation Date: June 7th, 2016
 %INFO% Last Modified: June 7th, 2016
 %INFO% Author: Andrew S. Keller
-%INFO% E-mail: arindrew@runbox.com
+%INFO% E-mail: andrew@pm.me
 %INFO% ********************************
 %INFO% Description: Prepares computer for 
 %INFO% sysprep 
