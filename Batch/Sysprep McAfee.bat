@@ -23,5 +23,5 @@ pause
 %INFO% ********************************
 %INFO% Description: Prepares computer for 
 %INFO% sysprep by removing the appropriate
-%INFO% registry keys
+%INFO% keys from the registry.
 %INFO% ********************************
