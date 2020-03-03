@@ -11,12 +11,12 @@ pause
 :EXIT
 
 %INFO% ********************************
-%INFO% Script:
-%INFO% Creation Date:
-%INFO% Last Modified:
+%INFO% Script: Sysprep Office 2016
+%INFO% Creation Date: June 7th, 2016
+%INFO% Last Modified: Mar 3rd, 2019
 %INFO% Author: Andrew S. Keller
-%INFO% E-mail: arindrew@runbox.com
+%INFO% E-mail: andrew@pm.me
 %INFO% ********************************
-%INFO% Description:
-%INFO% 
+%INFO% Description: Prepares computer for 
+%INFO% sysprep 
 %INFO% ********************************
