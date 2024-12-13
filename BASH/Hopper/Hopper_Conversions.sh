@@ -1,110 +1,100 @@
 #!/bin/bash
-# Script to be run once a day via Hopper.Launcher script in crontab
-# Script checks a set directory for files, and waits a set time period to send 
-# files via function to specified server and workflow
+#Script to be run once a day via a Hopper.Launcher script in crontab
+#Script checks a set directory for files, and waits a set time period to send files via function to specified server and workflow
+
 
 ### Global Variables ###
 
-# Define colors for echo output
+#Define colors for echo output
 RED='\033[0;31m'
-LRED='\033[0;31m'
-GREEN='\033[0;31m'
-NC='\033[0;31m' # No color
+LRED='\033[1;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No color
 
-# The workflow you want this script to send files to
+# The Workflow you want this script to send files to
 echo -e "\n ${RED} $(date "+%D %H:%M:%S")${NC}"
 if [[ -z $1 ]]; then
   Workflow=Conversions
-  echo -e "### No workflow value passed as first argument, using default: ${GREEN}$Workflow${NC}"
+  echo -e "### No Workflow Value passed as first argument, using default: ${GREEN}$Workflow${NC}"
 else
   Workflow=$1
-  echo -e "### Using first argument: ${GREEN}'$1'${NC} as workflow variable"
+  echo -e "### Using first argument: ${GREEN}'$1'${NC} as Workflow Variable"
 fi
 
-# The location of the files you want this script to look for files in
+#The location of the files you want this script to look for file in
 if [[ -z $2 ]]; then
-  Folder=/mnt/NAS/InputData/HotFolders/Conversions
-  echo -e "### No workflow value passed as second argument, using default: ${GREEN}$Folder${NC}"
+  Folder=/mnt/NAS/InputData/HotFolders/Master_Hopper/Conversions
+  echo -e "### No Workflow Value passed as second argument, using default: $Folder"
 else
   Folder=$2
-  echo -e "### Using second argument: ${GREEN}'$2'${NC} as folder variable"
+  echo -e "### Using second argument: $2 as Folder Variable"
 fi
 
-# Delay is in seconds. This is the wait time between transmissions of a file to a server.
+#Delay is in seconds, 600 = 10 minutes, 3600 = 1 hour. This is wait time between transmissions of a file to a server.
 if [[ -z $3 ]]; then
   Delay=30
-  echo -e "### No workflow value passed as third argument, using default: ${GREEN}$Delay${NC}"
+  echo -e "### No Workflow Value passed as third argument, using default: $Delay\n"
 else
   Delay=$3
-  echo -e "### Using third argument: ${GREEN}'$3'${NC} as delay value"
+  echo -e "### Using third argument: $3 as Delay Value\n"
 fi
 
 
 #Servers to send files to, 1 server per line, by case-sensitive hostname
 Servers=(
-server1
-server2
-server3
-server4
-server5
-server6
-server7
-server8
-server9
-server10
+ndwsstwslpdal08
 )
 
-# Array of files to send to servers
-Files=$(find $Folder -maxdepth 1 -type f)
+#Array of files to send to servers
+Files=$(find "$Folder" -maxdepth 1 -type f)
 
-# Create destination directory for log creation
-if [[ ! -d /mnt/NAS/Users/ADMIN/log/dalim/$HOSTNAME ]]; then
-  mkdir -p /mnt/NAS/Users/ADMIN/log/dalim/$HOSTNAME
+#Create destination directory for log creation
+today=/mnt/NAS/DalimUsers/ADMIN/log/Hopper/$(date -I)
+if [[ ! -d $today ]]; then
+    mkdir -p "$today"
 fi
 
-# Log output location
-LOG=/mnt/NAS/Users/ADMIN/log/dalim/$HOSTNAME/$(date +%F)_TLA.Hopper_$Workflow.log
-
-# These are the server and files index number count in the array, they should not be modified
+#These are the Server and File Index number count in the Array, they should not be modified 
 ServerNumber=0
 FileName=0
 
 ((
 
-# Function to send the files, this set to curl as it is easiest. SCP will require the creation of SSH keys
+#Function to send the files, this set to curl as it is easiest. scp will require the creation of ssh keys
 
 function Transfer() {
-  echo "$date "+%D %H:%M:%S") Calling Transfer Function"
-  echo "    File: $F"
-  echo "    Workflow: $Workflow"
-  echo "    Server: $S"
-  curl -s -S http://server1:8080/twist/twistUpload?server=$S -F name=$Workflow -F file=@$F
-  echo "    Waiting $Delay second(s) to send next file"
-  sleep $Delay
+    echo "  Transfer Function Called"
+    echo "    File: $F"
+    echo "    Workflow: $Workflow"
+    echo "    Server: $S"
+    curl -s -S http://"$S":8080/twist/twistUpload?server="$S" -F name="$Workflow" -F file=@"$F"
+    echo "    Waiting $Delay second(s) to send next file"
+    rm "$F"
+    sleep "$Delay"
 }
 
-echo "$(date "+%D %H:%M:%S") Sending ${#Files[@] files to ${#Servers[@]} servers, with a time delay of $Delay seconds between them"
+#echo "$(date "+%D %H:%M:%S"): Sending ${#Files[@]} files to 1 of ${#Servers[@]} servers, with a time delay of $Delay seconds between them"
 
 for F in ${Files[*]}; do
-  S=${Servers[$ServerNumber]}
-  echo "$(date "+%D %H:%M:%S") Start sending File: $F to the Workflow: $Workflow on Server: $S"
-  Transfer
-  echo "$(date "+%D %H:%M:%S")Completed $F"
-  echo ""
-  if [[ "$ServerNumber" == "$(( ${#Servers[@]} -1 ))" ]]; then
-    #echo "$ServerNumber is 1 less than ${#Servers[@]} resetting back to zero"
-    ServerNumber=0
-    FileName=$(( $FileName +1 ))
-  else
-    ServerNumber=$(( ServerNumber +1 ))
-    FileName=$(( FileName +1 ))
-  fi
-  if [[ "$FileName" -le "` expr ${#Files[@]} - 1`" ]]; then
-    #echo "File = $F"
-    echo -e "$(date "+%D %H:%M:%S") \tWaiting $Delay seconds to send next file"
-    sleep $Delay
-  else
-    echo -e "$(date "+%D %H:%M:%S") \tCompleted File Transfer for $F \n--------"
-  fi
+    S=${Servers[$ServerNumber]}
+    echo "$(date "+%D %H:%M:%S") Start sending File: $F to the Workflow: $Workflow on Server: $S"
+    Transfer
+    echo "$(date "+%D %H:%M:%S") Completed $F"
+    echo ""
+    if [[ "$ServerNumber" == "$(( ${#Servers[@]} - 1 ))" ]]; then
+        #echo "$ServerNumber is 1 less than  ${#Servers[@]} reseting back to zero"
+        ServerNumber=0
+        FileName=$(( FileName + 1 ))
+    else
+        ServerNumber=$(( ServerNumber + 1 ))
+        FileName=$(( FileName + 1 ))
+    fi
+    if [[ "$FileName" -le "` expr ${#Files[@]} - 1`" ]]; then
+        #echo "File = $F"
+        echo -e "$(date "+%D %H:%M:%S") \tWaiting $Delay seconds to send next file"
+        sleep "$Delay"
+    else
+        echo -e "$(date "+%D %H:%M:%S") \tCompleted File Transfer for $F \n--------"
+    fi
 done
-) 2>&1 >> $LOG)
+) 2>&1 >> "$today"/NGA.Hopper_"$Workflow".log)
