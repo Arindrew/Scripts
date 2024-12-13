@@ -1,18 +1,27 @@
 #!/bin/bash
 
-# The workflow you want this script to send files to
-Workflow=12_ctptransfer_Publish
+#Define colors for stdout
+RED='\033[0;31m'
+LRED='\033[1;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No color
 
-# Delay is in seconds between transmissions of a file to a server
-Delay=20
+# The Workflow you want this script to send files to
+Workflow=14_Automate_noQRCode
 
-LOG=/mnt/NAS/Users/ADMIN/log/$HOSTNAME/$(date +%F)_Generic_TWiST_curl_List.log
+#Delay is in seconds. This is wait time between transmissions.
+Delay=30
 
-((
-  while read -r line; do
-    echo "$(date "+%D %H:%M:%S") Sending the file $line to the workflow $Workflow on the server $S"
-    curl -s -S http://server1:8080/twist/twistUpload -F name=$Workflow -F file=@$line
-    echo "Waiting $Delay seconds to send next file"
-    sleep $Delay
-  done < /root/publishList_Trimmed
-) 2>&1 >> $LOG)
+#Define your path to the file list here
+FileList=/path/to/file
+
+while read -r line; do 
+  echo "$(date "+%D %H:%M:%S") Sending: $line"
+  curl -s -S http://ndwsstwslpdal08:8080/twist/twistUpload -F name=$Workflow -F file=@$line
+  echo -n "Waiting $Delay seconds: "
+  for seconds in $(eval "echo {$Delay..01}"); do 
+    sleep 1 #keep at 1, set actual delay in variable above
+    echo -en "${GREEN}.${NC}"; 
+  done
+echo ""
+done < $FileList
