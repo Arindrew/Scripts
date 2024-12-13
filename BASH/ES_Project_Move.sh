@@ -33,7 +33,7 @@ if [[ $EUID == 0 ]]; then
     echo -e "1\n2"
     
     if [[ "$ProjectC" ]] && [[ "$ProjectI" ]]; then
-      echo -e "$(date +%T) Project ${GREEN}$NRNed${NC} found in ${GREEN}$Project${NC} and ${GREEN}$ProjectI${NC}
+      echo -e "$(date +%T) Project ${GREEN}$NRNed${NC} found in ${GREEN}$ProjectC${NC} and ${GREEN}$ProjectI${NC}"
       # Move the project out of the local-storage composite/input
       # folder and into the remote-storage composite/input folder
       echo -e "$(date +%T) Moving $ProjectC"
@@ -48,8 +48,8 @@ if [[ $EUID == 0 ]]; then
       # Chown the symbolic links just to be sure they have the correct ownership
       chown daltomcat:dalim -h "$ESComposite"/"ProjectC"
       chown daltomcat:dalim -h "$ESInput"/"ProjectI"
-    #else
-      #echo -e "Project ${LRED}$NRNed${NC} not found in ${GREEN}$ESComposite${NC} and/or ${GREEN}$ESInput${NC}
+    else
+      echo -e "Project ${LRED}$NRNed${NC} not found in ${GREEN}$ESComposite${NC} and/or ${GREEN}$ESInput${NC}"
     fi
   done <$CSVPath/"$(date +%F)".csv
   echo ""
