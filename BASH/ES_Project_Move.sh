@@ -38,7 +38,7 @@ if [[ $EUID == 0 ]]; then
       # folder and into the remote-storage composite/input folder
       echo -e "$(date +%T) Moving $ProjectC"
       mv "$ESComposite"/"$ProjectC" "ESCompletedComposite"/
-      echo -e "$)date +%T) Moving $ProjectI"
+      echo -e "$(date +%T) Moving $ProjectI"
       mv "$ESInput"/"$ProjectI" "ESCompletedInput"/
       # Create symbolic links in the local-storage
       # project folder to the remote-storage project folder
