@@ -4,10 +4,14 @@ FirewallConfig="/etc/firewalld/firewalld.conf"
 NessusRuleFile="/mnt/NAS/DalimUsers/Admin/nessus.xml"
 NessusConfigFile="/etc/firewalld/services/nessus.xml"
 
-RED='\033[0;31m' #Red
-LRED='\033[1;31m' #Light Red
-GREEN='\033[0;32m' #Green
-NC='\033[0m' #No color
+#Define colors for stdout
+function colors_stdout()
+{
+RED='\033[0;031m'
+LRED='\033[1;031m'
+GREEN='\033[0;032m'
+NC='\033[0m'
+}
 
 if [[ $EUID == 0 ]]; then
 
@@ -93,3 +97,5 @@ if [[ $EUID == 0 ]]; then
 else
   echo -e "${LRED}You must be root to run this script${NC}"
 fi
+
+colors_stdout
