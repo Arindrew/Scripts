@@ -2,14 +2,14 @@
 #Script to be run once a day via a Hopper.Launcher script in crontab
 #Script checks a set directory for files, and waits a set time period to send files via function to specified server and workflow
 
-
-### Global Variables ###
-
-#Define colors for echo output
-RED='\033[0;31m'
-LRED='\033[1;31m'
-GREEN='\033[0;32m'
-NC='\033[0m' # No color
+#Define colors for stdout
+function colors_stdout()
+{
+RED='\033[0;031m'
+LRED='\033[1;031m'
+GREEN='\033[0;032m'
+NC='\033[0m'
+}
 
 # The Workflow you want this script to send files to
 echo -e "\n ${RED} $(date "+%D %H:%M:%S")${NC}"
@@ -98,3 +98,5 @@ for F in ${Files[*]}; do
     fi
 done
 ) 2>&1 >> "$today"/NGA.Hopper_"$Workflow".log)
+
+colors_stdout
