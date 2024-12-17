@@ -7,13 +7,14 @@
 #  Will check if script is running, if found running skip initiating.          #
 ################################################################################
 
-### Global Variables ###
-
-#Define colors for echo output
-RED='\033[0;31m'
-LRED='\033[1;31m'
-GREEN='\033[0;32m'
-NC='\033[0m' # No color
+#Define colors for stdout
+function colors_stdout()
+{
+RED='\033[0;031m'
+LRED='\033[1;031m'
+GREEN='\033[0;032m'
+NC='\033[0m'
+}
 
 #Directory to check for Hopper Scripts to run
 Scripts=/mnt/NAS/DalimUsers/MasterFiles/Master_Scripts/SecNet_Master_Hopper/
@@ -79,3 +80,5 @@ for S in NGA.Hopper_*.sh; do
   fi
 done
 ) 2>&1 >> $today/NGA.Hopper_Launcher.log)
+
+colors_stdout
