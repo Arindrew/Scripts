@@ -6,10 +6,13 @@
 # local-storage for additional projects.
 
 #Define colors for stdout
+function colors_stdout()
+{
 RED='\033[0;031m'
 LRED='\033[1;031m'
 GREEN='\033[0;032m'
 NC='\033[0m'
+}
 
 # check for root
 if [[ $EUID == 0 ]]; then
@@ -58,3 +61,5 @@ if [[ $EUID == 0 ]]; then
 else
   echo -e "${LRED} You must be root to run this script ${NC}"
 fi
+
+colors_stdout
