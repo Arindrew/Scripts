@@ -1,10 +1,13 @@
 #!/bin/bash
 
 #Define colors for stdout
-RED='\033[0;31m'
-LRED='\033[1;31m'
-GREEN='\033[0;32m'
-NC='\033[0m' # No color
+function colors_stdout()
+{
+RED='\033[0;031m'
+LRED='\033[1;031m'
+GREEN='\033[0;032m'
+NC='\033[0m'
+}
 
 # The Workflow you want this script to send files to
 Workflow=12_Automate_noQRCode
@@ -32,3 +35,5 @@ done < <(find $Folder -maxdepth 1 -type f -name "*.pdf")
 #    mv $file ${file:0:16}.pdf
 #  done < <(find . -maxdepth 1 -type f -name "*layered_attributed.pdf")
 #######
+
+colors_stdout
