@@ -1,10 +1,13 @@
 #!/bin/bash 
 
 #Define colors for stdout
-RED='\033[0;31m'
-LRED='\033[1;31m'
-GREEN='\033[0;32m'
-NC='\033[0m' # No color
+function colors_stdout()
+{
+RED='\033[0;031m'
+LRED='\033[1;031m'
+GREEN='\033[0;032m'
+NC='\033[0m'
+}
 
 # Destination folder to search in
 searchDir=/mnt/NAS/WorkingFiles/Workflows/12_Automate_noQRCode/IRS2
@@ -32,3 +35,5 @@ while IFS= read -r line; do
   fi
 echo ""
 done < <(ls $sourceDir)
+
+colors_stdout
